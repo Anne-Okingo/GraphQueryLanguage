@@ -1,11 +1,18 @@
+
 const loginForm = document.getElementById("loginForm");
 if (loginForm) {
   loginForm.addEventListener("submit", async function (e) {
     e.preventDefault();
-    const identifier = document.getElementById("identifier").value;
+
+    const identifier = document.getElementById("identifier").value.trim();
     const password = document.getElementById("password").value;
     const errorElem = document.getElementById("error");
     errorElem.textContent = "";
+
+    if (!identifier || !password) {
+      errorElem.textContent = "Please enter both username/email and password.";
+      return;
+    }
 
     const credentials = btoa(`${identifier}:${password}`);
     try {
@@ -16,15 +23,20 @@ if (loginForm) {
           "Content-Type": "application/json",
         },
       });
-      if (!response.ok) throw new Error("Invalid credentials");
 
-      //get the jwt strip the quates and store it in the local storage
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "Invalid credentials");
+      }
+
       let jwt = await response.text();
       jwt = jwt.replace(/^"|"$/g, "");
       localStorage.setItem("jwt", jwt);
+
       window.location.href = "profile.html";
     } catch (err) {
-      errorElem.textContent = err.message || "Login failed";
+      console.error("Login error:", err);
+      errorElem.textContent = err.message || "Login failed. Please try again.";
     }
   });
 }

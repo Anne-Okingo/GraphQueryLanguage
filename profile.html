@@ -4,21 +4,24 @@
   <meta charset="UTF-8">
   <title>Profile</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="profile-container">
     <button onclick="logout()">Logout</button>
-    <h1>User Profile</h1>
-    <div class="profile-card">
+    <h1>Developer's Profile</h1>
+    <div class="profile-header">
       <div class="avatar" id="avatar"></div>
-      <div id="userInfo"></div>
-      <div class="stats" id="stats"></div>
-      <div id="skills"></div>
+      <div class="user-meta">
+        <div id="userInfo"></div>
+        <div id="skills"></div>
+      </div>
+      <div class="stats stat-cards compact-stats" id="stats"></div>
     </div>
-    <div class="graph-section">
-      <div class="graph-card"><div class="graph-title">XP Over Time</div><div id="graph1"></div></div>
-      <div class="graph-card"><div class="graph-title">XP by Project</div><div id="graph2"></div></div>
-      <div class="graph-card"><div class="graph-title">Pass/Fail Ratio</div><div id="graph3"></div></div>
+    <div class="dashboard-grid">
+      <div class="graph-card"><div class="graph-title">XP Over Time</div><canvas id="xpOverTimeChart"></canvas></div>
+      <div class="graph-card"><div class="graph-title">XP by Project</div><canvas id="xpByProjectChart"></canvas></div>
+      <div class="graph-card"><div class="graph-title">Pass/Fail Ratio</div><canvas id="passFailChart"></canvas></div>
     </div>
   </div>
   <script src="script/graphql.js"></script>

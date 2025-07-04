@@ -43,6 +43,14 @@
     const totalXP = xpData && xpData.transaction ? xpData.transaction.reduce((acc, t) => acc + t.amount, 0) : 0;
     const totalXP_MB = (totalXP / 1048576).toFixed(2);
 
+    // Calculate XP earned in the last 30 days
+    const now = new Date();
+    const last30DaysXP = xpData && xpData.transaction ? xpData.transaction.filter(tx => {
+      const txDate = new Date(tx.createdAt);
+      return (now - txDate) / (1000 * 60 * 60 * 24) <= 30;
+    }).reduce((acc, t) => acc + t.amount, 0) : 0;
+    const last30DaysXP_MB = (last30DaysXP / 1048576).toFixed(2);
+
     // Fetch audit transactions
     const auditData = await queryGraphQL(`
       query GetAudits($userId: Int!) {
@@ -68,15 +76,6 @@
     const passCount = grades.filter(g => g.grade === 1).length;
     const failCount = grades.filter(g => g.grade === 0).length;
 
-    // XP by project
-    const xpByProject = {};
-    if (xpData && xpData.transaction) {
-      xpData.transaction.forEach(tx => {
-        const project = tx.path.split('/')[2] || 'Unknown';
-        xpByProject[project] = (xpByProject[project] || 0) + tx.amount;
-      });
-    }
-
     // Skills (if available)
     let skillsHtml = '';
     if (userData.user[0].skills) {
@@ -90,15 +89,26 @@
     // Stat cards
     document.getElementById("stats").innerHTML = `
       <div class="stat-card"><div class="stat-label">Total XP</div><div class="stat-value">${totalXP_MB} MB</div></div>
+      <div class="stat-card"><div class="stat-label">XP (Last 30d)</div><div class="stat-value">${last30DaysXP_MB} MB</div></div>
       <div class="stat-card"><div class="stat-label">Audits</div><div class="stat-value">${auditCount}</div></div>
       <div class="stat-card"><div class="stat-label">Pass</div><div class="stat-value" style="color:var(--success)">${passCount}</div></div>
       <div class="stat-card"><div class="stat-label">Fail</div><div class="stat-value" style="color:var(--danger)">${failCount}</div></div>
     `;
 
-    // Draw SVG graphs
-    if (xpData && xpData.transaction) drawXPOverTime(xpData.transaction, "graph1");
-    if (xpByProject && Object.keys(xpByProject).length > 0) drawXPByProject(xpByProject, "graph2");
-    if (grades.length > 0) drawPassFailPie(passCount, failCount, "graph3");
+    // XP by project
+    const xpByProject = {};
+    if (xpData && xpData.transaction) {
+      xpData.transaction.forEach(tx => {
+        const parts = tx.path.split('/');
+        const project = parts[3] || 'Unknown'; // Adjust if needed
+        xpByProject[project] = (xpByProject[project] || 0) + tx.amount;
+      });
+    }
+
+    // Draw Chart.js graphs
+    if (xpData && xpData.transaction) drawXPOverTime(xpData.transaction, "xpOverTimeChart");
+    if (Object.keys(xpByProject).length > 0) drawXPByProject(xpByProject, "xpByProjectChart");
+    if (grades.length > 0) drawPassFailPie(passCount, failCount, "passFailChart");
   } catch (err) {
     document.getElementById("userInfo").innerHTML = `<p style='color:red;'>Failed to load profile: ${err.message}</p>`;
     document.getElementById("stats").innerHTML = '';
