@@ -18,7 +18,9 @@ if (loginForm) {
       });
       if (!response.ok) throw new Error("Invalid credentials");
 
-      const jwt = await response.text();
+      //get the jwt strip the quates and store it in the local storage
+      let jwt = await response.text();
+      jwt = jwt.replace(/^"|"$/g, "");
       localStorage.setItem("jwt", jwt);
       window.location.href = "profile.html";
     } catch (err) {
