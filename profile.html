@@ -6,13 +6,21 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <button onclick="logout()">Logout</button>
-  <h1>User Profile</h1>
-  <div id="userInfo"></div>
-  <h2>Graphs</h2>
-  <div id="graph1"></div>
-  <div id="graph2"></div>
-
+  <div class="profile-container">
+    <button onclick="logout()">Logout</button>
+    <h1>User Profile</h1>
+    <div class="profile-card">
+      <div class="avatar" id="avatar"></div>
+      <div id="userInfo"></div>
+      <div class="stats" id="stats"></div>
+      <div id="skills"></div>
+    </div>
+    <div class="graph-section">
+      <div class="graph-card"><div class="graph-title">XP Over Time</div><div id="graph1"></div></div>
+      <div class="graph-card"><div class="graph-title">XP by Project</div><div id="graph2"></div></div>
+      <div class="graph-card"><div class="graph-title">Pass/Fail Ratio</div><div id="graph3"></div></div>
+    </div>
+  </div>
   <script src="script/graphql.js"></script>
   <script src="script/profile.js"></script>
   <script src="script/graphs.js"></script>
