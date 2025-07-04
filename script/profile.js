@@ -1,4 +1,5 @@
 (async function () {
+  //stores the jwt in a local storage for later use
     const jwt = localStorage.getItem("jwt");
     console.log("JWT:", jwt);
 
@@ -10,10 +11,11 @@
     const userInfo = parseJWT(jwt);
   console.log("Parsed JWT:", userInfo);
 
-  const userId = userInfo.userId;
+  // Use the correct field for user ID from JWT
+  const userId = userInfo.userId || userInfo.id || userInfo.sub;
   if (!userId) {
     console.error("User ID not found in JWT, redirecting to login...");
-    return window.location.href = "login.html";
+     return window.location.href = "login.html";
   }
 
   
@@ -21,13 +23,15 @@
     document.getElementById("userInfo").innerHTML = '<p>Loading...</p>';
   
     try {
-        // Fetch user info
-        const userData = await queryGraphQL(`{
-          user {
-            id
-            login
+        // Fetch user info using userId
+        const userData = await queryGraphQL(`
+          query GetUser($userId: Int!) {
+            user(where: { id: { _eq: $userId } }) {
+              id
+              login
+            }
           }
-        }`);
+        `, { userId: Number(userId) });
   
         // Defensive check for userData.user
         if (!userData || !userData.user || !userData.user[0]) {
@@ -45,7 +49,7 @@
               createdAt
               path
             }
-          }`, { userId });
+          }`, { userId: Number(userId) });
   
         // Fetch audit transactions
         const auditData = await queryGraphQL(`
@@ -56,7 +60,7 @@
             }) {
               id
             }
-          }`, { userId });
+          }`, { userId: Number(userId) });
   
         // Display user info
         document.getElementById("userInfo").innerHTML = `
@@ -67,7 +71,7 @@
   
         // Draw SVG graphs
         if (xpData && xpData.transaction) drawXPOverTime(xpData.transaction);
-        if (userId) drawPassFailRatio(userId);
+        if (userId) drawPassFailRatio(Number(userId));
     } catch (err) {
         document.getElementById("userInfo").innerHTML = `<p style='color:red;'>Failed to load profile: ${err.message}</p>`;
     }
