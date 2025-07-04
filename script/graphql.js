@@ -15,6 +15,11 @@ async function queryGraphQL(query, variables = {}) {
   }
   
   function parseJWT(token) {
-    return JSON.parse(atob(token.split('.')[1]));
+    try {
+      return JSON.parse(atob(token.split('.')[1]));
+    } catch (e) {
+      return {};
+    }
   }
+  
   
