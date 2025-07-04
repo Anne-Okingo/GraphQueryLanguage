@@ -32,7 +32,8 @@
       query GetXP($userId: Int!) {
         transaction(where: {
           userId: { _eq: $userId },
-          type: { _eq: "xp" }
+          type: { _eq: "xp" },
+           eventId: {_eq: 75},
         }) {
           amount
           createdAt
@@ -40,6 +41,7 @@
         }
       }`, { userId: Number(userId) });
     const totalXP = xpData && xpData.transaction ? xpData.transaction.reduce((acc, t) => acc + t.amount, 0) : 0;
+    const totalXP_MB = (totalXP / 1048576).toFixed(2);
 
     // Fetch audit transactions
     const auditData = await queryGraphQL(`
@@ -87,7 +89,7 @@
 
     // Stat cards
     document.getElementById("stats").innerHTML = `
-      <div class="stat-card"><div class="stat-label">Total XP</div><div class="stat-value">${totalXP}</div></div>
+      <div class="stat-card"><div class="stat-label">Total XP</div><div class="stat-value">${totalXP_MB} MB</div></div>
       <div class="stat-card"><div class="stat-label">Audits</div><div class="stat-value">${auditCount}</div></div>
       <div class="stat-card"><div class="stat-label">Pass</div><div class="stat-value" style="color:var(--success)">${passCount}</div></div>
       <div class="stat-card"><div class="stat-label">Fail</div><div class="stat-value" style="color:var(--danger)">${failCount}</div></div>
