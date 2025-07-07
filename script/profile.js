@@ -102,9 +102,8 @@ const auditRatio = downAudits > 0 ? (upAudits / downAudits).toFixed(1) : upAudit
       <div class="stat-card"><div class="stat-label">Total XP</div><div class="stat-value">${totalXP_MB} MB</div></div>
       <div class="stat-card"><div class="stat-label">XP (Last 30d)</div><div class="stat-value">${last30DaysXP_MB} MB</div></div>
       <div class="stat-card"><div class="stat-label">Audits</div><div class="stat-value">${auditRatio}</div></div>
-      <div class="stat-card"><div class="stat-label">Pass</div><div class="stat-value" style="color:var(--success)">${passCount}</div></div>
-      <div class="stat-card"><div class="stat-label">Fail</div><div class="stat-value" style="color:var(--danger)">${failCount}</div></div>
     `;
+
 
     // XP by project
     const xpByProject = {};
@@ -120,6 +119,7 @@ const auditRatio = downAudits > 0 ? (upAudits / downAudits).toFixed(1) : upAudit
     if (xpData && xpData.transaction) drawXPOverTime(xpData.transaction, "xpOverTimeChart");
     if (Object.keys(xpByProject).length > 0) drawXPByProject(xpByProject, "xpByProjectChart");
     if (grades.length > 0) drawPassFailPie(passCount, failCount, "passFailChart");
+    
   } catch (err) {
     document.getElementById("userInfo").innerHTML = `<p style='color:red;'>Failed to load profile: ${err.message}</p>`;
     document.getElementById("stats").innerHTML = '';
