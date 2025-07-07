@@ -52,16 +52,27 @@
     const last30DaysXP_MB = (last30DaysXP / 1048576).toFixed(2);
 
     // Fetch audit transactions
-    const auditData = await queryGraphQL(`
-      query GetAudits($userId: Int!) {
-        transaction(where: {
-          userId: { _eq: $userId },
-          type: { _eq: "audit" }
-        }) {
-          id
-        }
-      }`, { userId: Number(userId) });
-    const auditCount = auditData && auditData.transaction ? auditData.transaction.length : 0;
+  // Fetch audit XP (up/down transactions)
+const auditXPData = await queryGraphQL(`
+  query GetAuditXP($userId: Int!) {
+    transaction(
+      where: {
+        userId: { _eq: $userId }
+        type: { _in: ["up", "down"] }
+      }
+    ) {
+      type
+      amount
+    }
+  }
+`, { userId: Number(userId) });
+
+
+const audits = auditXPData?.transaction || [];
+const upAudits = audits.filter(a => a.type === 'up').reduce((sum, a) => sum + a.amount, 0);
+const downAudits = audits.filter(a => a.type === 'down').reduce((sum, a) => sum + Math.abs(a.amount), 0);
+const auditRatio = downAudits > 0 ? (upAudits / downAudits).toFixed(1) : upAudits.toFixed(1);
+
 
     // Fetch grades
     const gradesData = await queryGraphQL(`
@@ -90,7 +101,7 @@
     document.getElementById("stats").innerHTML = `
       <div class="stat-card"><div class="stat-label">Total XP</div><div class="stat-value">${totalXP_MB} MB</div></div>
       <div class="stat-card"><div class="stat-label">XP (Last 30d)</div><div class="stat-value">${last30DaysXP_MB} MB</div></div>
-      <div class="stat-card"><div class="stat-label">Audits</div><div class="stat-value">${auditCount}</div></div>
+      <div class="stat-card"><div class="stat-label">Audits</div><div class="stat-value">${auditRatio}</div></div>
       <div class="stat-card"><div class="stat-label">Pass</div><div class="stat-value" style="color:var(--success)">${passCount}</div></div>
       <div class="stat-card"><div class="stat-label">Fail</div><div class="stat-value" style="color:var(--danger)">${failCount}</div></div>
     `;
