@@ -43,7 +43,6 @@
     const totalXP = xpData && xpData.transaction ? xpData.transaction.reduce((acc, t) => acc + t.amount, 0) : 0;
     const totalXP_MB = (totalXP / 1000000).toFixed(2);
 
-
     // Calculate XP earned in the last 30 days
     const now = new Date();
     const last30DaysXP = xpData && xpData.transaction ? xpData.transaction.filter(tx => {
