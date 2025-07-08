@@ -18,11 +18,18 @@
         user(where: { id: { _eq: $userId } }) {
           id
           login
+          email
         }
       }
     `, { userId: Number(userId) });
     if (!userData || !userData.user || !userData.user[0]) throw new Error('User data not found. Please log in again.');
+    const id = userData.user[0].id;
     const login = userData.user[0].login;
+    const email = userData.user[0].email;
+    console.log(login);
+    console.log(id);
+    console.log(email);
+
 
     // Avatar: use first letter of login
     document.getElementById("avatar").textContent = login ? login[0].toUpperCase() : '?';
@@ -96,9 +103,15 @@ const auditRatio = downAudits > 0 ? (upAudits / downAudits).toFixed(1) : upAudit
 
     // User info
     document.getElementById("userInfo").innerHTML = `<h3>${login}</h3>`;
+   
 
     // Stat cards
     document.getElementById("stats").innerHTML = `
+       <table class="user-info-table">
+    <tr><th>Username</th><td>${login}</td></tr>
+    <tr><th>User Id</th><td>${id}</td></tr>
+    <tr><th>User Email</th><td>${email}</td></tr>
+  </table>
       <div class="stat-card"><div class="stat-label">Total XP</div><div class="stat-value">${totalXP_MB} MB</div></div>
       <div class="stat-card"><div class="stat-label">XP (Last 30d)</div><div class="stat-value">${last30DaysXP_MB} MB</div></div>
       <div class="stat-card"><div class="stat-label">Audits</div><div class="stat-value">${auditRatio}</div></div>
