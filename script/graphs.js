@@ -77,7 +77,7 @@ function drawProjectStatusPie(pass, fail, targetId = "passFailChart") {
   window.passFailChartInstance = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['completed', 'Opened/Failled'],
+      labels: ['completed', 'Opened'],
       datasets: [{
         data: [pass, fail],
         backgroundColor: ['#27ae60', '#e74c3c'],

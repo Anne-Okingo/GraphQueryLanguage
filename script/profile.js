@@ -5,12 +5,6 @@
   const userId = userInfo.userId || userInfo.id || userInfo.sub;
   if (!userId) return window.location.href = "login.html";
 
-  // Show loading state
- // document.getElementById("userInfo").innerHTML = '<p>Loading...</p>';
-  document.getElementById("stats").innerHTML = '';
-  document.getElementById("skills").innerHTML = '';
-  document.getElementById("avatar").innerHTML = '';
-
   try {
     // Fetch user info
     const userData = await queryGraphQL(`
@@ -26,9 +20,6 @@
     const id = userData.user[0].id;
     const login = userData.user[0].login;
     const email = userData.user[0].email;
-    console.log(login);
-    console.log(id);
-    console.log(email);
 
 
     // Avatar: use first letter of login
@@ -58,8 +49,7 @@
     }).reduce((acc, t) => acc + t.amount, 0) : 0;
     const last30DaysXP_MB = (last30DaysXP / 1048576).toFixed(2);
 
-    // Fetch audit transactions
-  // Fetch audit XP (up/down transactions)
+    // Fetch audit transactions fetch audit XP (up/down transactions)
 const auditXPData = await queryGraphQL(`
   query GetAuditXP($userId: Int!) {
     transaction(
@@ -98,23 +88,16 @@ const projectStatus = await queryGraphQL(`
 `, { userId: Number(userId) });
 
 const progressList = projectStatus?.progress || [];
-const completedProjects = progressList.filter(p => p.grade !== null).length;
-const incompleteProjects = progressList.filter(p => p.grade === null).length;
-
-console.log("Completed Projects:", completedProjects);
-console.log("Incomplete Projects:", incompleteProjects);
+// Filter out 'module' from incomplete projects
+const completedProjects = progressList.filter(p => p.grade !== null && p.object?.name !== 'Module').length;
+const incompleteProjects = progressList.filter(p => p.grade === null && p.object?.name !== 'Module').length;
 
 
-    // Skills (if available)
     let skillsHtml = '';
     if (userData.user[0].skills) {
       skillsHtml = `<span>Skills: ${userData.user[0].skills.join(', ')}</span>`;
     }
     document.getElementById("skills").innerHTML = skillsHtml;
-
-
-    // User info
-    document.getElementById("userInfo").innerHTML = `<h3 style="color: white;">${login}</h3>`;
 
 
     // Stat cards
