@@ -8,6 +8,8 @@ A web-based developer profile dashboard that visualizes user experience (XP), pr
 - **Interactive Graphs:** Visualizes XP over time, XP by project, and project status using Chart.js.
 - **Responsive UI:** Styled with a modern, responsive CSS.
 
+
+
 ## File Structure
 - `login.html` — Login page for user authentication.
 - `profile.html` — Main dashboard for authenticated users.
