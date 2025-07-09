@@ -6,7 +6,7 @@
   if (!userId) return window.location.href = "login.html";
 
   // Show loading state
-  document.getElementById("userInfo").innerHTML = '<p>Loading...</p>';
+ // document.getElementById("userInfo").innerHTML = '<p>Loading...</p>';
   document.getElementById("stats").innerHTML = '';
   document.getElementById("skills").innerHTML = '';
   document.getElementById("avatar").innerHTML = '';
@@ -81,18 +81,29 @@ const downAudits = audits.filter(a => a.type === 'down').reduce((sum, a) => sum 
 const auditRatio = downAudits > 0 ? (upAudits / downAudits).toFixed(1) : upAudits.toFixed(1);
 
 
-    // Fetch grades
-    const gradesData = await queryGraphQL(`
-      query GetGrades($userId: Int!) {
-        progress(where: { userId: { _eq: $userId } }) {
-          grade
-          path
-        }
+    // Fetch project completion status
+const projectStatus = await queryGraphQL(`
+  query ProjectsStatus($userId: Int!) {
+    progress(where: { userId: { _eq: $userId }, eventId: { _eq: 75 } }) {
+      objectId
+      grade
+      createdAt
+      object {
+        id
+        name
+        type
       }
-    `, { userId: Number(userId) });
-    const grades = gradesData && gradesData.progress ? gradesData.progress : [];
-    const passCount = grades.filter(g => g.grade === 1).length;
-    const failCount = grades.filter(g => g.grade === 0).length;
+    }
+  }
+`, { userId: Number(userId) });
+
+const progressList = projectStatus?.progress || [];
+const completedProjects = progressList.filter(p => p.grade !== null).length;
+const incompleteProjects = progressList.filter(p => p.grade === null).length;
+
+console.log("Completed Projects:", completedProjects);
+console.log("Incomplete Projects:", incompleteProjects);
+
 
     // Skills (if available)
     let skillsHtml = '';
@@ -101,9 +112,10 @@ const auditRatio = downAudits > 0 ? (upAudits / downAudits).toFixed(1) : upAudit
     }
     document.getElementById("skills").innerHTML = skillsHtml;
 
+
     // User info
-    document.getElementById("userInfo").innerHTML = `<h3>${login}</h3>`;
-   
+    document.getElementById("userInfo").innerHTML = `<h3 style="color: white;">${login}</h3>`;
+
 
     // Stat cards
     document.getElementById("stats").innerHTML = `
@@ -131,7 +143,7 @@ const auditRatio = downAudits > 0 ? (upAudits / downAudits).toFixed(1) : upAudit
     // Draw Chart.js graphs
     if (xpData && xpData.transaction) drawXPOverTime(xpData.transaction, "xpOverTimeChart");
     if (Object.keys(xpByProject).length > 0) drawXPByProject(xpByProject, "xpByProjectChart");
-    if (grades.length > 0) drawPassFailPie(passCount, failCount, "passFailChart");
+    if (progressList) drawProjectStatusPie(completedProjects, incompleteProjects, "passFailChart");
     
   } catch (err) {
     document.getElementById("userInfo").innerHTML = `<p style='color:red;'>Failed to load profile: ${err.message}</p>`;

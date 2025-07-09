@@ -4,8 +4,8 @@ A web-based developer profile dashboard that visualizes user experience (XP), pr
 
 ## Features
 - **Login System:** Secure authentication using JWT tokens.
-- **Profile Dashboard:** Displays user info, XP stats, pass/fail ratios, and project breakdowns by xp gained over time and xp gained per projects.
-- **Interactive Graphs:** Visualizes XP over time, XP by project, and pass/fail ratio using Chart.js.
+- **Profile Dashboard:** Displays user info, XP stats, project status, and project breakdowns by xp gained over time and xp gained per projects.
+- **Interactive Graphs:** Visualizes XP over time, XP by project, and project status using Chart.js.
 - **Responsive UI:** Styled with a modern, responsive CSS.
 
 ## File Structure

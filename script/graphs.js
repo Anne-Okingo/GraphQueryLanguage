@@ -71,13 +71,13 @@ function drawXPByProject(xpByProject, targetId = "xpByProjectChart") {
   });
 }
 
-function drawPassFailPie(pass, fail, targetId = "passFailChart") {
+function drawProjectStatusPie(pass, fail, targetId = "passFailChart") {
   const ctx = document.getElementById(targetId).getContext('2d');
   if (window.passFailChartInstance) window.passFailChartInstance.destroy();
   window.passFailChartInstance = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: ['Pass', 'Fail'],
+      labels: ['completed', 'Opened/Failled'],
       datasets: [{
         data: [pass, fail],
         backgroundColor: ['#27ae60', '#e74c3c'],
