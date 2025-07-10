@@ -11,7 +11,7 @@ A web-based developer profile dashboard that visualizes user experience (XP), pr
 
 
 ## File Structure
-- `login.html` — Login page for user authentication.
+- `idex.html` — Login page for user authentication.
 - `profile.html` — Main dashboard for authenticated users.
 - `style.css` — Styles for all pages and components.
 - `script/auth.js` — Handles login form and JWT storage.
@@ -30,12 +30,12 @@ A web-based developer profile dashboard that visualizes user experience (XP), pr
 You can use the **Live Server** extension.
 
 1. Make sure the **Live Server** extension is installed.
-2. Right-click on `login.html` in the project directory.
+2. Right-click on `index.html` in the project directory.
 3. Select **"Open with Live Server"**.
 4. Your browser will open at:  
-   `http://127.0.0.1:5500/login.html`
+   `http://127.0.0.1:5500/index.html`
  ```
-3. **Open `login.html` in your browser.**
+3. **Open `index.html` in your browser.**
    - Enter your credentials to log in.
    - On success, you are redirected to `profile.html`.
 4. **Profile Dashboard:**

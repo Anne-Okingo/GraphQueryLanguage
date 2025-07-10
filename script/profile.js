@@ -1,9 +1,9 @@
 (async function () {
   const jwt = localStorage.getItem("jwt");
-  if (!jwt) return window.location.href = "login.html";
+  if (!jwt) return window.location.href = "index.html";
   const userInfo = parseJWT(jwt);
   const userId = userInfo.userId || userInfo.id || userInfo.sub;
-  if (!userId) return window.location.href = "login.html";
+  if (!userId) return window.location.href = "index.html";
 
   try {
     // Fetch user info
@@ -138,5 +138,5 @@ const incompleteProjects = progressList.filter(p => p.grade === null && p.object
 
 function logout() {
   localStorage.removeItem('jwt');
-  window.location.href = 'login.html';
+  window.location.href = 'index.html';
 }
