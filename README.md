@@ -2,13 +2,18 @@
 
 A web-based developer profile dashboard that visualizes user experience (XP), project progress, and audit statistics using data from a GraphQL API all writen in Javascript.
 
+---
 ## Features
 - **Login System:** Secure authentication using JWT tokens.
 - **Profile Dashboard:** Displays user info, XP stats, project status, and project breakdowns by xp gained over time and xp gained per projects.
 - **Interactive Graphs:** Visualizes XP over time, XP by project, and project status using Chart.js.
 - **Responsive UI:** Styled with a modern, responsive CSS.
+---
+##  Live Demo
 
+🔗 [Visit graphql](https://anne-okingo.github.io/GraphQueryLanguage/index.html)
 
+---
 
 ## File Structure
 - `idex.html` — Login page for user authentication.
