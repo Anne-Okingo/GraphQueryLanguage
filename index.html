@@ -9,7 +9,12 @@
   <h2>Login</h2>
   <form id="loginForm">
     <input type="text" id="identifier" placeholder="Username or Email" required>
-    <input type="password" id="password" placeholder="Password" required>
+    <div style="position:relative;">
+      <input type="password" id="password" placeholder="Password" required style="padding-right:2.5em;">
+      <button type="button" id="togglePassword" aria-label="Show password" style="position:absolute; right:0.5em; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; padding:0;">
+        <span id="eyeIcon" aria-hidden="true">👁️</span>
+      </button>
+    </div>
     <button type="submit">Login</button>
     <p id="error" style="color:red;"></p>
   </form>

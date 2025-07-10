@@ -40,3 +40,15 @@ if (loginForm) {
     }
   });
 }
+
+const togglePassword = document.getElementById('togglePassword');
+const passwordInput = document.getElementById('password');
+const eyeIcon = document.getElementById('eyeIcon');
+if (togglePassword && passwordInput && eyeIcon) {
+  togglePassword.addEventListener('click', function () {
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
+    eyeIcon.textContent = isPassword ? '🙈' : '👁️';
+    togglePassword.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+  });
+}
